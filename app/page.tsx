@@ -1,14 +1,17 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Gamepad2, Code2, MonitorSmartphone, Palette } from "lucide-react"
+import { Gamepad2, Code2, MonitorSmartphone, Palette, ArrowUp } from "lucide-react"
 import { BackgroundFX } from "@/components/background-fx"
 import GamingCursor from "@/components/gaming/cursor"
+import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
 
-const ANCHORS = ["profile", "about", "skills", "projects", "contact"]
+const ANCHORS = ["profile", "about", "skills", "projects", "faq", "contact"]
 
 export default function GamingPortfolioPage() {
   const [active, setActive] = useState<string>("profile")
+  const [showTop, setShowTop] = useState(false)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -25,8 +28,18 @@ export default function GamingPortfolioPage() {
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+    const onScroll = () => setShowTop(window.scrollY > 600)
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
   return (
     <main className="relative min-h-screen text-pretty">
+      {/* Global Navbar */}
+      <Navbar />
+
       {/* Animated Background */}
       <BackgroundFX />
 
@@ -77,17 +90,41 @@ export default function GamingPortfolioPage() {
       </section>
 
       {/* About */}
-      <section id="about" className="section">
-        <h2 className="section-title flex items-center gap-2">
+      <section id="about" className="section" aria-labelledby="about-heading">
+        <h2 id="about-heading" className="section-title flex items-center gap-2">
           <svg className="text-sky-400" width="0" height="0" aria-hidden="true" />
           About Me
         </h2>
         <div className="mt-5 grid md:grid-cols-2 gap-6">
           <div className="glass rounded-xl p-6">
-            <p className="text-gray-300">
-              I’m a frontend developer focused on high-performance, immersive UIs. From component systems and design
-              tokens to animation and accessibility, I build products that feel great on every device. I love turning
-              complex ideas into intuitive interfaces with clean code.
+            <p className="text-gray-300 leading-relaxed">
+              I’m a frontend developer who loves building interfaces that feel fast, responsive, and purposeful. My
+              portfolio highlights projects where I turn complex requirements into clean, reliable{" "}
+              <a href="#projects" className="underline underline-offset-4 hover:text-white">
+                user interfaces
+              </a>{" "}
+              with modern web technology. I specialize in React, Next.js, TypeScript, and Tailwind CSS, and I obsess
+              over the details that make experiences memorable: performance budgets, focus states, micro-interactions,
+              and layout systems that scale. I approach each build like a product, combining design thinking with solid
+              engineering to ensure accessibility, clarity, and real-world usefulness.
+              <br />
+              <br />
+              As a web developer, I develop component-driven architectures, organize tokens and themes, and keep
+              consistency through reusable patterns. My work often explores subtle motion and glassmorphic surfaces for
+              a premium feel—always balanced with contrast and readability, so white text on glass remains crisp on any
+              device. Whether it’s a dashboard, portfolio, or a data-rich interface, I lean on sensible state
+              management, data fetching strategies, and careful loading sequences to keep interfaces responsive and
+              smooth. If you’re looking for a frontend developer who can ship polished{" "}
+              <strong>portfolio-grade projects</strong> with <em>unique designs</em> and practical UX, I’d love to
+              collaborate. Jump to{" "}
+              <a href="#skills" className="underline underline-offset-4 hover:text-white">
+                skills
+              </a>{" "}
+              to see tools I use or head straight to{" "}
+              <a href="#contact" className="underline underline-offset-4 hover:text-white">
+                contact
+              </a>{" "}
+              to start a conversation.
             </p>
           </div>
           <div className="glass rounded-xl p-6">
@@ -97,6 +134,9 @@ export default function GamingPortfolioPage() {
               <li>Animations: motion-first UX, micro-interactions</li>
               <li>Tooling: SWR, Vercel, performance tuning</li>
             </ul>
+            <p className="mt-4 text-sm text-gray-400">
+              P.S. This site uses a bluish–purple glassmorphic theme with smooth animations for a modern, premium look.
+            </p>
           </div>
         </div>
       </section>
@@ -128,8 +168,8 @@ export default function GamingPortfolioPage() {
       </section>
 
       {/* Projects as Achievements */}
-      <section id="projects" className="section">
-        <h2 className="section-title flex items-center gap-2">
+      <section id="projects" className="section" aria-labelledby="projects-heading">
+        <h2 id="projects-heading" className="section-title flex items-center gap-2">
           <svg className="text-sky-400" width="0" height="0" aria-hidden="true" />
           Projects · Achievements
         </h2>
@@ -138,36 +178,116 @@ export default function GamingPortfolioPage() {
             {
               title: "Futuristic UI Kit",
               desc: "A modular component kit with glassmorphism and neon effects.",
+              meta: {
+                problem: "Teams needed consistent, premium UI with fast iteration.",
+                tools: "React, TypeScript, Tailwind, shadcn/ui",
+                challenge: "Balancing neon glow with accessibility and contrast.",
+                outcome: "Reusable patterns reduced build time and improved visual consistency.",
+              },
             },
             {
               title: "Realtime Dashboard",
               desc: "SWR-powered dashboards with animated charts and live states.",
+              meta: {
+                problem: "Stakeholders needed instant feedback on changing data.",
+                tools: "Next.js, SWR, Recharts, Vercel",
+                challenge: "Smoothing loading states without jank or layout shift.",
+                outcome: "Live dashboards with optimistic updates and great perceived performance.",
+              },
             },
             {
               title: "Animation Lab",
               desc: "Micro-interactions and transitions focused on UX delight.",
+              meta: {
+                problem: "Interfaces felt static and lacked meaningful motion.",
+                tools: "Framer Motion, Tailwind, CSS keyframes",
+                challenge: "Creating expressive motion while staying subtle and purposeful.",
+                outcome: "Increased engagement and clarity with micro-interactions.",
+              },
             },
-          ].map((p, i) => (
+          ].map((p) => (
             <article key={p.title} className="glass rounded-xl overflow-hidden group">
               <div className="aspect-video bg-black/50 relative">
                 <img
-                  src={`/.jpg?height=200&width=400&query=${encodeURIComponent(p.title)}`}
-                  alt={`${p.title} preview`}
+                  src={`/.jpg?key=rap05&height=200&width=400&query=${encodeURIComponent(p.title + " project preview")}`}
+                  alt={`${p.title} — project preview`}
                   className="absolute inset-0 h-full w-full object-cover opacity-80 group-hover:opacity-100 transition"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="p-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-mono text-lg text-gray-100">{p.title}</h3>
-                  <span className="badge">
-                    <svg className="text-sky-400" width="0" height="0" aria-hidden="true" />
-                    Unlocked
-                  </span>
+                  <a href="#contact" className="badge hover:bg-white/10" aria-label={`Discuss ${p.title}`}>
+                    Discuss
+                  </a>
                 </div>
                 <p className="mt-2 text-gray-300 text-sm">{p.desc}</p>
+                <ul className="mt-3 space-y-1 text-sm text-gray-300">
+                  <li>
+                    <strong>Problem:</strong> {p.meta.problem}
+                  </li>
+                  <li>
+                    <strong>Tools:</strong> {p.meta.tools}
+                  </li>
+                  <li>
+                    <strong>Challenges:</strong> {p.meta.challenge}
+                  </li>
+                  <li>
+                    <strong>Outcome:</strong> {p.meta.outcome}
+                  </li>
+                </ul>
               </div>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section id="faq" className="section" aria-labelledby="faq-heading">
+        <h2 id="faq-heading" className="section-title flex items-center gap-2">
+          <svg className="text-sky-400" width="0" height="0" aria-hidden="true" />
+          FAQ
+        </h2>
+        <div className="mt-5 glass rounded-xl p-6">
+          <details className="group">
+            <summary className="cursor-pointer text-white/90 hover:text-white transition-colors">
+              What’s your primary focus as a frontend developer?
+            </summary>
+            <p className="mt-2 text-gray-300">
+              Building performant, accessible UIs with clean architecture and thoughtful motion. I balance aesthetics
+              and usability.
+            </p>
+          </details>
+          <details className="group mt-4">
+            <summary className="cursor-pointer text-white/90 hover:text-white transition-colors">
+              Which tools do you prefer?
+            </summary>
+            <p className="mt-2 text-gray-300">
+              React, Next.js, TypeScript, Tailwind CSS, and shadcn/ui for components. I deploy on Vercel.
+            </p>
+          </details>
+          <details className="group mt-4">
+            <summary className="cursor-pointer text-white/90 hover:text-white transition-colors">
+              Can you help with design and micro-interactions?
+            </summary>
+            <p className="mt-2 text-gray-300">
+              Yes—glassmorphism, subtle glow, and motion are part of my workflow, always with high contrast and
+              readability.
+            </p>
+          </details>
+          <details className="group mt-4">
+            <summary className="cursor-pointer text-white/90 hover:text-white transition-colors">
+              How can I start a project with you?
+            </summary>
+            <p className="mt-2 text-gray-300">
+              Send a message via the{" "}
+              <a className="underline underline-offset-4" href="#contact">
+                Contact
+              </a>{" "}
+              section with a brief about scope and timeline.
+            </p>
+          </details>
         </div>
       </section>
 
@@ -265,7 +385,19 @@ export default function GamingPortfolioPage() {
         </div>
       </section>
 
-      <div className="section pt-0">{/* GamingFooter remains unchanged */}</div>
+      {/* Back-to-top floating button */}
+      {showTop && (
+        <a
+          href="#profile"
+          aria-label="Back to top"
+          className="fixed bottom-6 right-6 z-40 rounded-full border border-white/20 bg-white/15 p-3 text-white/90 backdrop-blur transition hover:bg-white/25 focus-visible:outline-none"
+        >
+          <ArrowUp className="h-5 w-5" />
+        </a>
+      )}
+
+      {/* Global Footer */}
+      <Footer />
     </main>
   )
 }

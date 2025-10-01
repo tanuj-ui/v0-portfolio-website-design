@@ -8,11 +8,13 @@ const SECTIONS = [
   { id: "about", label: "About" },
   { id: "skills", label: "Skills" },
   { id: "projects", label: "Projects" },
+  { id: "faq", label: "FAQ" }, // include FAQ anchor
   { id: "contact", label: "Contact" },
 ] as const
 
 export function Navbar() {
   const [active, setActive] = useState<string>("home")
+  const [open, setOpen] = useState(false) // mobile menu state
   const indicatorRef = useRef<HTMLDivElement>(null)
   const itemRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
 
@@ -28,20 +30,23 @@ export function Navbar() {
       },
       { rootMargin: "-40% 0px -55% 0px", threshold: [0, 0.25, 0.5, 1] },
     )
-
     SECTIONS.forEach((s) => {
       const el = document.getElementById(s.id)
       if (el) observer.observe(el)
     })
-
     return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const onHash = () => setOpen(false)
+    window.addEventListener("hashchange", onHash)
+    return () => window.removeEventListener("hashchange", onHash)
   }, [])
 
   const indicatorStyle = useMemo(() => {
     const el = itemRefs.current[active]
     if (!el) return { transform: "translateX(0)", width: 0, left: 0 }
     const rect = el.getBoundingClientRect()
-    // compute relative to parent
     const parentRect = el.parentElement?.getBoundingClientRect()
     const left = parentRect ? rect.left - parentRect.left : 0
     return { transform: `translateX(${left}px)`, width: rect.width }
@@ -52,6 +57,7 @@ export function Navbar() {
       <nav
         className="mx-auto mt-4 w-[min(100%-1rem,1000px)] rounded-full border border-white/15 bg-white/10 px-3 py-2 backdrop-blur supports-[backdrop-filter]:bg-white/10"
         aria-label="Primary"
+        role="navigation"
       >
         <div className="relative flex items-center justify-between">
           <a
@@ -60,8 +66,9 @@ export function Navbar() {
           >
             Tanuj
           </a>
+
+          {/* desktop links */}
           <div className="relative hidden gap-1 md:flex">
-            {/* underline / highlight indicator */}
             <div
               ref={indicatorRef}
               aria-hidden="true"
@@ -86,13 +93,38 @@ export function Navbar() {
               </a>
             ))}
           </div>
-          <a
-            href="#contact"
-            className="rounded-full bg-white/15 px-4 py-2 text-sm font-medium text-white/90 ring-1 ring-inset ring-white/20 hover:bg-white/20 focus-visible:outline-none md:hidden"
+
+          {/* mobile hamburger */}
+          <button
+            type="button"
+            aria-label="Open menu"
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            onClick={() => setOpen((o) => !o)}
+            className="rounded-full bg-white/15 px-3 py-2 text-sm font-medium text-white/90 ring-1 ring-inset ring-white/20 hover:bg-white/20 focus-visible:outline-none md:hidden"
           >
-            Contact
-          </a>
+            Menu
+          </button>
         </div>
+
+        {/* mobile panel */}
+        {open && (
+          <div id="mobile-menu" role="dialog" aria-modal="true" className="mt-2 grid gap-1 md:hidden">
+            {SECTIONS.map((s) => (
+              <a
+                key={s.id}
+                href={`#${s.id}`}
+                className={cn(
+                  "rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                  active === s.id ? "bg-white/20 text-white" : "text-white/80 hover:bg-white/10 hover:text-white",
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {s.label}
+              </a>
+            ))}
+          </div>
+        )}
       </nav>
     </header>
   )
