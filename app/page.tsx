@@ -10,8 +10,6 @@ import { Footer } from "@/components/footer"
 
 const ANCHORS = ["profile", "about", "skills", "projects", "faq", "contact"]
 
-export const revalidate = 3600 // enable ISR-style caching for performance
-
 export default function GamingPortfolioPage() {
   const [active, setActive] = useState<string>("profile")
   const [showTop, setShowTop] = useState(false)
