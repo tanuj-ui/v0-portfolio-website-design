@@ -11,7 +11,7 @@ export function HomeSection() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="mx-auto w-[min(100%,950px)] text-center"
+        className="mx-auto w-[min(100%,950px)] text-center motion-reduce:transition-none motion-reduce:transform-none"
       >
         <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium text-white/90 backdrop-blur">
           <Sparkles className="h-4 w-4 text-white/80" />

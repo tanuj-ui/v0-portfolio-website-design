@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import Image from "next/image" // use next/image
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
@@ -62,29 +63,51 @@ export function ProjectsSection() {
               whileHover={{ y: -6 }}
             >
               <Card className="group overflow-hidden border-white/15 bg-white/10 backdrop-blur">
-                <div className="relative">
-                  <img
-                    src={p.image || "/placeholder.svg"}
+                <div className="relative h-48 w-full">
+                  <Image
+                    src={p.image || "/placeholder.svg?height=192&width=768&query=Project%20preview"}
                     alt={`${p.title} preview`}
-                    className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none"
                   />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:transition-none" />
                 </div>
                 <CardHeader className="flex items-center justify-between gap-3">
                   <CardTitle className="text-white">{p.title}</CardTitle>
                   {p.link && (
-                    <Button asChild size="sm" className="rounded-full bg-white/20 text-white hover:bg-white/30">
+                    <Button
+                      asChild
+                      size="sm"
+                      className="rounded-full bg-white/20 text-white hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                    >
                       <a href={p.link} target="_blank" rel="noreferrer">
                         Live
                       </a>
                     </Button>
                   )}
                 </CardHeader>
-                <CardContent className="pb-6 text-white/80">{p.desc}</CardContent>
+                <CardContent className="pb-6 text-white/85">{p.desc}</CardContent>
               </Card>
             </motion.article>
           ))}
         </div>
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": projects.map((p) => ({
+                "@type": "CreativeWork",
+                name: p.title,
+                description: p.desc,
+                url: "#projects",
+                author: { "@type": "Person", name: "Tanuj Kumar Singh" },
+              })),
+            }),
+          }}
+        />
       </div>
     </section>
   )

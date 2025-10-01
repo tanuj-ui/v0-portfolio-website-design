@@ -10,11 +10,13 @@ const pressStart = Press_Start_2P({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-retro",
+  display: "swap",
 })
 
 const orbitron = Orbitron({
   subsets: ["latin"],
   variable: "--font-display",
+  display: "swap",
 })
 
 export const metadata: Metadata = {
@@ -50,6 +52,9 @@ export const metadata: Metadata = {
     images: ["/premium-portfolio-website.jpg"],
   },
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://example.com"),
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://example.com",
+  },
 }
 
 export default function RootLayout({
@@ -87,10 +92,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="canonical" href={siteUrl} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd) }} />
       </head>
       <body className={`font-sans ${GeistSans.variable} ${orbitron.variable} antialiased min-h-screen`}>
+        <a
+          href="#content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-black/80 focus:px-3 focus:py-2 focus:text-white"
+        >
+          Skip to content
+        </a>
         <Suspense fallback={null}>
           {children}
           <Analytics />

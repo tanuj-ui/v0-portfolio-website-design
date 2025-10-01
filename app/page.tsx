@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image" // use next/image to reduce CLS and enable lazy-loading
 import { Gamepad2, Code2, MonitorSmartphone, Palette, ArrowUp } from "lucide-react"
 import { BackgroundFX } from "@/components/background-fx"
 import GamingCursor from "@/components/gaming/cursor"
@@ -8,6 +9,8 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 
 const ANCHORS = ["profile", "about", "skills", "projects", "faq", "contact"]
+
+export const revalidate = 3600 // enable ISR-style caching for performance
 
 export default function GamingPortfolioPage() {
   const [active, setActive] = useState<string>("profile")
@@ -36,30 +39,31 @@ export default function GamingPortfolioPage() {
   }, [])
 
   return (
-    <main className="relative min-h-screen text-pretty">
+    <main id="content" className="relative min-h-screen text-pretty">
+      {" "}
+      // add #content target for skip link
       {/* Global Navbar */}
       <Navbar />
-
       {/* Animated Background */}
       <BackgroundFX />
-
       {/* Interactive Cursor */}
       <GamingCursor />
-
       {/* Profile / Hero */}
       <section id="profile" className="section pt-28">
         <div className="glass rounded-2xl p-6 md:p-10">
           <div className="grid md:grid-cols-3 gap-6 items-center">
             <div className="md:col-span-2">
               <h1 className="font-mono text-3xl md:text-5xl leading-tight text-balance">
-                <span className="text-gray-200">Tanuj Kumar Singh</span>
+                <span className="text-gray-100">Tanuj Kumar Singh</span>
                 <span className="block text-sky-400 drop-shadow-[0_0_12px_rgba(56,189,248,0.45)]">
                   Frontend Developer
                 </span>
               </h1>
-              <p className="mt-4 text-gray-300 max-w-prose">
-                Building fast, polished web interfaces with a gamer’s eye for responsiveness, feedback, and fun. I craft
-                accessible, modern UI with clean architectures and smooth animations.
+              <p className="mt-4 text-gray-200 max-w-prose">
+                {" "}
+                // clarify GEO and availability Based in India. I’m available for internships and select freelance work.
+                I build fast, polished web interfaces with a gamer’s eye for responsiveness, feedback, and
+                fun—accessible, modern UI with clean architecture and smooth animations.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <a href="#projects" className="badge hover:bg-white/10">
@@ -79,16 +83,18 @@ export default function GamingPortfolioPage() {
               </div>
             </div>
             <div className="justify-self-center">
-              <img
+              <Image
                 src="/images/krotos-profile.jpg"
-                alt="Kratos-like profile portrait"
+                alt="Portrait of Tanuj Kumar Singh"
+                width={160}
+                height={160}
+                priority
                 className="h-40 w-40 rounded-full ring-2 ring-sky-500/60 shadow-[0_0_24px_rgba(56,189,248,0.35)] object-cover"
               />
             </div>
           </div>
         </div>
       </section>
-
       {/* About */}
       <section id="about" className="section" aria-labelledby="about-heading">
         <h2 id="about-heading" className="section-title flex items-center gap-2">
@@ -109,18 +115,14 @@ export default function GamingPortfolioPage() {
               engineering to ensure accessibility, clarity, and real-world usefulness.
               <br />
               <br />
-              As a web developer, I develop component-driven architectures, organize tokens and themes, and keep
-              consistency through reusable patterns. My work often explores subtle motion and glassmorphic surfaces for
-              a premium feel—always balanced with contrast and readability, so white text on glass remains crisp on any
-              device. Whether it’s a dashboard, portfolio, or a data-rich interface, I lean on sensible state
-              management, data fetching strategies, and careful loading sequences to keep interfaces responsive and
-              smooth. If you’re looking for a frontend developer who can ship polished{" "}
+              I’m based in India and collaborate remotely across time zones. I’m open to internships and freelance
+              engagements. If you’re looking for a frontend developer who can ship polished{" "}
               <strong>portfolio-grade projects</strong> with <em>unique designs</em> and practical UX, I’d love to
               collaborate. Jump to{" "}
               <a href="#skills" className="underline underline-offset-4 hover:text-white">
                 skills
               </a>{" "}
-              to see tools I use or head straight to{" "}
+              or head to{" "}
               <a href="#contact" className="underline underline-offset-4 hover:text-white">
                 contact
               </a>{" "}
@@ -140,7 +142,6 @@ export default function GamingPortfolioPage() {
           </div>
         </div>
       </section>
-
       {/* Skills */}
       <section id="skills" className="section">
         <h2 className="section-title flex items-center gap-2">
@@ -166,7 +167,6 @@ export default function GamingPortfolioPage() {
           ))}
         </div>
       </section>
-
       {/* Projects as Achievements */}
       <section id="projects" className="section" aria-labelledby="projects-heading">
         <h2 id="projects-heading" className="section-title flex items-center gap-2">
@@ -208,23 +208,27 @@ export default function GamingPortfolioPage() {
           ].map((p) => (
             <article key={p.title} className="glass rounded-xl overflow-hidden group">
               <div className="aspect-video bg-black/50 relative">
-                <img
-                  src={`/.jpg?key=rap05&height=200&width=400&query=${encodeURIComponent(p.title + " project preview")}`}
+                <Image
+                  src={`/.jpg?key=mmokn&height=225&width=400&query=${encodeURIComponent(p.title + " project preview")}`}
                   alt={`${p.title} — project preview`}
-                  className="absolute inset-0 h-full w-full object-cover opacity-80 group-hover:opacity-100 transition"
-                  loading="lazy"
-                  decoding="async"
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover opacity-80 transition group-hover:opacity-100 motion-reduce:transition-none"
                 />
               </div>
               <div className="p-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-mono text-lg text-gray-100">{p.title}</h3>
-                  <a href="#contact" className="badge hover:bg-white/10" aria-label={`Discuss ${p.title}`}>
+                  <a
+                    href="#contact"
+                    className="badge hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                    aria-label={`Discuss ${p.title}`}
+                  >
                     Discuss
                   </a>
                 </div>
-                <p className="mt-2 text-gray-300 text-sm">{p.desc}</p>
-                <ul className="mt-3 space-y-1 text-sm text-gray-300">
+                <p className="mt-2 text-gray-200 text-sm">{p.desc}</p>
+                <ul className="mt-3 space-y-1 text-sm text-gray-200">
                   <li>
                     <strong>Problem:</strong> {p.meta.problem}
                   </li>
@@ -242,8 +246,44 @@ export default function GamingPortfolioPage() {
             </article>
           ))}
         </div>
-      </section>
 
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Person",
+                  name: "Tanuj Kumar Singh",
+                  url: process.env.NEXT_PUBLIC_SITE_URL || "https://example.com",
+                },
+                ...[
+                  {
+                    name: "Futuristic UI Kit",
+                    description: "A modular component kit with glassmorphism and neon effects.",
+                    url: "#projects",
+                  },
+                  {
+                    name: "Realtime Dashboard",
+                    description: "SWR-powered dashboards with animated charts and live states.",
+                    url: "#projects",
+                  },
+                  {
+                    name: "Animation Lab",
+                    description: "Micro-interactions and transitions focused on UX delight.",
+                    url: "#projects",
+                  },
+                ].map((project) => ({
+                  "@type": "CreativeWork",
+                  ...project,
+                  author: { "@type": "Person", name: "Tanuj Kumar Singh" },
+                })),
+              ],
+            }),
+          }}
+        />
+      </section>
       <section id="faq" className="section" aria-labelledby="faq-heading">
         <h2 id="faq-heading" className="section-title flex items-center gap-2">
           <svg className="text-sky-400" width="0" height="0" aria-hidden="true" />
@@ -290,7 +330,6 @@ export default function GamingPortfolioPage() {
           </details>
         </div>
       </section>
-
       {/* Contact */}
       <section id="contact" className="section">
         <h2 className="section-title flex items-center gap-2">
@@ -308,83 +347,70 @@ export default function GamingPortfolioPage() {
               ;(e.target as HTMLFormElement).reset()
             }}
             className="grid md:grid-cols-2 gap-4"
+            noValidate
           >
             <div className="flex flex-col gap-2">
-              <label htmlFor="name" className="text-sm text-gray-300">
+              <label htmlFor="name" className="text-sm text-gray-200">
                 Name
               </label>
               <input
                 id="name"
                 name="name"
-                className="rounded-md bg-black/30 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500/60"
+                required
+                className="peer rounded-md bg-black/30 border border-white/15 px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-sky-500/60"
                 placeholder="Your name"
               />
+              <p className="mt-1 hidden text-sm text-red-300 peer-[&:user-invalid]:block">Please enter your name.</p>
             </div>
             <div className="flex flex-col gap-2">
-              <label htmlFor="email" className="text-sm text-gray-300">
+              <label htmlFor="email" className="text-sm text-gray-200">
                 Email
               </label>
               <input
                 id="email"
                 name="email"
                 type="email"
-                className="rounded-md bg-black/30 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500/60"
+                required
+                className="peer rounded-md bg-black/30 border border-white/15 px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-sky-500/60"
                 placeholder="you@example.com"
               />
+              <p className="mt-1 hidden text-sm text-red-300 peer-[&:user-invalid]:block">
+                Enter a valid email address.
+              </p>
             </div>
             <div className="md:col-span-2 flex flex-col gap-2">
-              <label htmlFor="message" className="text-sm text-gray-300">
+              <label htmlFor="message" className="text-sm text-gray-200">
                 Message
               </label>
               <textarea
                 id="message"
                 name="message"
                 rows={5}
-                className="rounded-md bg-black/30 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500/60"
+                required
+                className="peer rounded-md bg-black/30 border border-white/15 px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-sky-500/60"
                 placeholder="Tell me about your project..."
               />
+              <p className="mt-1 hidden text-sm text-red-300 peer-[&:user-invalid]:block">
+                Please add a short message.
+              </p>
             </div>
             <div className="md:col-span-2 flex items-center justify-between gap-3 flex-wrap">
               <button
                 type="submit"
-                className="px-4 py-2 rounded-md bg-sky-600/80 hover:bg-sky-600 text-white border border-sky-500/50"
+                className="px-4 py-2 rounded-md bg-sky-600 text-white hover:bg-sky-500 border border-sky-500/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
               >
                 Send
               </button>
-              <div className="flex items-center gap-2">
-                <a
-                  className="badge hover:bg-white/10"
-                  href="https://github.com/tanuj-ui"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  GitHub
+              <p className="text-sm text-gray-200">
+                Prefer email? Write to{" "}
+                <a className="underline underline-offset-4" href="mailto:tanujkumar14122005@gmail.com">
+                  tanujkumar14122005@gmail.com
                 </a>
-                <a
-                  className="badge hover:bg-white/10"
-                  href="https://www.linkedin.com/in/tanuj-kumar-singh-303aa6320?original_referer=https%3A%2F%2Ftanuj-ui.github.io%2F"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  LinkedIn
-                </a>
-                <a
-                  className="badge hover:bg-white/10"
-                  href="https://www.instagram.com/tanuj_._singh/#"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Instagram
-                </a>
-                <a className="badge hover:bg-white/10" href="mailto:tanujkumar14122005@gmail.com">
-                  Email
-                </a>
-              </div>
+              </p>
             </div>
           </form>
         </div>
       </section>
-
       {/* Back-to-top floating button */}
       {showTop && (
         <a
@@ -395,7 +421,6 @@ export default function GamingPortfolioPage() {
           <ArrowUp className="h-5 w-5" />
         </a>
       )}
-
       {/* Global Footer */}
       <Footer />
     </main>
