@@ -1,0 +1,252 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Deep navy background, high-contrast white foreground */
+  --background: oklch(0.16 0.03 250);
+  --foreground: oklch(0.98 0 0);
+
+  /* Cards/popovers remain neutral on dark navy */
+  --card: oklch(0.16 0.03 250);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.16 0.03 250);
+  --popover-foreground: oklch(0.98 0 0);
+
+  /* Electric blue brand */
+  --primary: oklch(0.72 0.14 242);
+  --primary-foreground: oklch(0.1 0.02 250);
+
+  /* Subtle neutrals */
+  --secondary: oklch(0.22 0.02 250);
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.22 0.02 250);
+  --muted-foreground: oklch(0.74 0.03 250);
+  --accent: oklch(0.27 0.03 250);
+  --accent-foreground: oklch(0.98 0 0);
+
+  /* Borders/inputs/ring in cool neutrals */
+  --border: oklch(0.28 0.03 250);
+  --input: oklch(0.28 0.03 250);
+  --ring: oklch(0.72 0.14 242); /* electric blue */
+
+  /* charts unchanged */
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  /* Keep dark mode consistent with navy/electric palette */
+  --background: oklch(0.14 0.03 250);
+  --foreground: oklch(0.98 0 0);
+  --card: oklch(0.14 0.03 250);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.14 0.03 250);
+  --popover-foreground: oklch(0.98 0 0);
+
+  --primary: oklch(0.72 0.14 242);
+  --primary-foreground: oklch(0.1 0.02 250);
+
+  --secondary: oklch(0.22 0.02 250);
+  --secondary-foreground: oklch(0.98 0 0);
+
+  --muted: oklch(0.22 0.02 250);
+  --muted-foreground: oklch(0.74 0.03 250);
+
+  --accent: oklch(0.27 0.03 250);
+  --accent-foreground: oklch(0.98 0 0);
+
+  --border: oklch(0.28 0.03 250);
+  --input: oklch(0.28 0.03 250);
+  --ring: oklch(0.72 0.14 242);
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  /* map the display font (Orbitron) to font-mono so existing headings using font-mono get the new look */
+  --font-mono: var(--font-display);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --card: var(--card);
+  --card-foreground: var(--card-foreground);
+  --popover: var(--popover);
+  --popover-foreground: var(--popover-foreground);
+  --primary: var(--primary);
+  --primary-foreground: var(--primary-foreground);
+  --secondary: var(--secondary);
+  --secondary-foreground: var(--secondary-foreground);
+  --muted: var(--muted);
+  --muted-foreground: var(--muted-foreground);
+  --accent: var(--accent);
+  --accent-foreground: var(--accent-foreground);
+  --destructive: var(--destructive);
+  --destructive-foreground: var(--destructive-foreground);
+  --border: var(--border);
+  --input: var(--input);
+  --ring: var(--ring);
+  --chart-1: var(--chart-1);
+  --chart-2: var(--chart-2);
+  --chart-3: var(--chart-3);
+  --chart-4: var(--chart-4);
+  --chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+    outline-color: color-mix(in oklab, var(--ring), transparent 50%);
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  overscroll-behavior-y: none;
+}
+
+/* Improve focus visibility on glassy surfaces */
+:where(a, button, input, textarea):focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--ring), white 12%);
+  outline-offset: 2px;
+}
+
+/* helpers for glassmorphism + neon look and scanlines overlay */
+.glass {
+  /* subtle glass surface */
+  background: color-mix(in oklab, white 6%, transparent);
+  backdrop-filter: blur(16px) saturate(110%);
+  -webkit-backdrop-filter: blur(16px) saturate(110%);
+  border: 1px solid color-mix(in oklab, var(--primary) 15%, white 8%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.neon-glow {
+  box-shadow: 0 0 .5rem color-mix(in oklab, var(--ring) 40%, transparent), 0 0 1.25rem
+    color-mix(in oklab, var(--ring) 28%, transparent);
+}
+
+.scanlines {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.03) 0px,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.badge {
+  @apply inline-flex items-center gap-1 rounded-md border border-white/10 px-2 py-1 text-xs text-gray-300 bg-white/5;
+}
+
+.section {
+  @apply container mx-auto max-w-6xl px-4 py-16 md:py-24;
+}
+
+.section-title {
+  @apply font-mono text-xl md:text-2xl tracking-wider text-gray-100;
+  text-shadow: 0 0 .5rem color-mix(in oklab, var(--ring) 38%, transparent);
+}
+
+/* global backdrop gradient (dark gray to black), red vignette edges */
+body {
+  background: linear-gradient(180deg, oklch(0.18 0.02 250) 0%, oklch(0.12 0.02 250) 100%),
+    linear-gradient(
+      0deg,
+      color-mix(in oklab, var(--primary) 18%, transparent) 0%,
+      color-mix(in oklab, var(--primary) 18%, transparent) 100%
+    ), url("/images/hero-city.png") center / cover fixed no-repeat;
+}
+
+/* smoother UI transitions site-wide for interactive elements */
+:where(a, button, input, textarea, select) {
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 240ms ease, transform
+    200ms ease;
+}
+:where(button, a)[data-press],
+:where(button, a):active {
+  transform: translateY(0.5px) scale(0.995);
+}
+
+/* add global hover-scale for clickable objects (gaming micro-interaction) */
+:where(a, button, [role="button"], [data-slot="button"], .badge) {
+  transform-origin: center;
+  will-change: transform;
+  transition:
+    transform 140ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 160ms ease, color 160ms ease, border-color 160ms ease, box-shadow 220ms ease;
+}
+:where(a, button, [role="button"], [data-slot="button"], .badge):hover {
+  transform: translateY(-1.5px) scale(1.08);
+}
+:where([data-slot="card"], .glass):hover {
+  transform: translateY(-1px) scale(1.05);
+  transition: transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+/* scale icons inside clickable elements a bit more */
+:where(a, button, [role="button"], [data-slot="button"], .badge) :is(svg, [data-icon], .icon) {
+  transition: transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+:where(a, button, [role="button"], [data-slot="button"], .badge):hover :is(svg, [data-icon], .icon) {
+  transform: scale(1.12);
+}
+
+/* Opt-out utility */
+.no-hover-scale:hover {
+  transform: none !important;
+}
+/* End hover-scale */
+
+/* glass screen texture for panels or full-bleed overlays */
+.glass-screen {
+  position: relative;
+  /* faint diagonal texture */
+  background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0 2px, transparent 2px 6px),
+    /* ultra subtle grain */
+    radial-gradient(1200px 800px at 10% 0%, rgba(255, 255, 255, 0.05), transparent 60%), rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 .75rem color-mix(in oklab, var(--ring) 28%, transparent);
+  backdrop-filter: blur(16px) saturate(110%);
+  -webkit-backdrop-filter: blur(16px) saturate(110%);
+  border-radius: var(--radius-lg);
+}
+.glass-screen::before {
+  /* top glare line for a “screen” vibe */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.0) 20%);
+  mask-image: radial-gradient(80% 40% at 50% 0%, black, transparent 70%);
+  opacity: 0.9;
+}
