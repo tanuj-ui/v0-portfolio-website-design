@@ -16,6 +16,7 @@ export function AboutSection() {
           <img
             src="/images/krotos-profile.jpg"
             alt="Kratos-like profile portrait"
+            loading="lazy"
             className="h-full w-full rounded-full object-cover ring-2 ring-sky-500/50"
           />
         </div>

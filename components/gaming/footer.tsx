@@ -2,7 +2,7 @@ import { Github, Instagram, Linkedin, Mail } from "lucide-react"
 
 export default function GamingFooter() {
   return (
-    <footer className="border-t border-white/10">
+    <footer role="contentinfo" className="border-t border-white/10">
       <div className="container mx-auto max-w-6xl px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
         <p className="text-gray-400 text-sm">© {new Date().getFullYear()} Tanuj Kumar Singh. All rights reserved.</p>
         <div className="flex items-center gap-3">

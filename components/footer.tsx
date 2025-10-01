@@ -4,7 +4,7 @@ import { Github, Linkedin, Instagram } from "lucide-react" // add icons
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-white/15 bg-white/5 py-8 backdrop-blur">
+    <footer role="contentinfo" className="relative border-t border-white/15 bg-white/5 py-8 backdrop-blur">
       <div className="mx-auto flex w-[min(100%,1000px)] flex-col items-center justify-between gap-3 px-4 text-center text-sm text-white/70 md:flex-row">
         <p>© {new Date().getFullYear()} Tanuj Kumar Singh. All rights reserved.</p>
         <div className="text-white/60">Built with Next.js + Tailwind + framer-motion</div>

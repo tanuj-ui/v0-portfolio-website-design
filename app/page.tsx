@@ -37,9 +37,7 @@ export default function GamingPortfolioPage() {
   }, [])
 
   return (
-    <main id="content" className="relative min-h-screen text-pretty">
-      {" "}
-      // add #content target for skip link
+    <main id="content" role="main" className="relative min-h-screen text-pretty">
       {/* Global Navbar */}
       <Navbar />
       {/* Animated Background */}
@@ -58,10 +56,9 @@ export default function GamingPortfolioPage() {
                 </span>
               </h1>
               <p className="mt-4 text-gray-200 max-w-prose">
-                {" "}
-                // clarify GEO and availability Based in India. I’m available for internships and select freelance work.
-                I build fast, polished web interfaces with a gamer’s eye for responsiveness, feedback, and
-                fun—accessible, modern UI with clean architecture and smooth animations.
+                Based in India. I’m available for internships and select freelance work. I build fast, polished web
+                interfaces with a gamer’s eye for responsiveness, feedback, and fun—accessible, modern UI with clean
+                architecture and smooth animations.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <a href="#projects" className="badge hover:bg-white/10">
@@ -207,7 +204,13 @@ export default function GamingPortfolioPage() {
             <article key={p.title} className="glass rounded-xl overflow-hidden group">
               <div className="aspect-video bg-black/50 relative">
                 <Image
-                  src={`/.jpg?key=mmokn&height=225&width=400&query=${encodeURIComponent(p.title + " project preview")}`}
+                  src={
+                    p.title === "Futuristic UI Kit"
+                      ? "/premium-portfolio-website-glassmorphism.jpg"
+                      : p.title === "Realtime Dashboard"
+                        ? "/futuristic-neon-dashboard-ui.jpg"
+                        : "/premium-portfolio-website.jpg"
+                  }
                   alt={`${p.title} — project preview`}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -340,7 +343,6 @@ export default function GamingPortfolioPage() {
               e.preventDefault()
               const fd = new FormData(e.currentTarget as HTMLFormElement)
               const name = fd.get("name")
-              console.log("[v0] Contact form submitted:", Object.fromEntries(fd.entries()))
               alert(`Thanks${name ? `, ${name}` : ""}! I’ll get back to you soon.`)
               ;(e.target as HTMLFormElement).reset()
             }}
@@ -358,7 +360,9 @@ export default function GamingPortfolioPage() {
                 className="peer rounded-md bg-black/30 border border-white/15 px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-sky-500/60"
                 placeholder="Your name"
               />
-              <p className="mt-1 hidden text-sm text-red-300 peer-[&:user-invalid]:block">Please enter your name.</p>
+              <p aria-live="polite" className="mt-1 hidden text-sm text-red-300 peer-[&:user-invalid]:block">
+                Please enter your name.
+              </p>
             </div>
             <div className="flex flex-col gap-2">
               <label htmlFor="email" className="text-sm text-gray-200">
@@ -372,7 +376,7 @@ export default function GamingPortfolioPage() {
                 className="peer rounded-md bg-black/30 border border-white/15 px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-sky-500/60"
                 placeholder="you@example.com"
               />
-              <p className="mt-1 hidden text-sm text-red-300 peer-[&:user-invalid]:block">
+              <p aria-live="polite" className="mt-1 hidden text-sm text-red-300 peer-[&:user-invalid]:block">
                 Enter a valid email address.
               </p>
             </div>
@@ -388,7 +392,7 @@ export default function GamingPortfolioPage() {
                 className="peer rounded-md bg-black/30 border border-white/15 px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-sky-500/60"
                 placeholder="Tell me about your project..."
               />
-              <p className="mt-1 hidden text-sm text-red-300 peer-[&:user-invalid]:block">
+              <p aria-live="polite" className="mt-1 hidden text-sm text-red-300 peer-[&:user-invalid]:block">
                 Please add a short message.
               </p>
             </div>
@@ -400,7 +404,7 @@ export default function GamingPortfolioPage() {
                 Send
               </button>
               <p className="text-sm text-gray-200">
-                Prefer email? Write to{" "}
+                Available for internships/freelance — based in India. Email:{" "}
                 <a className="underline underline-offset-4" href="mailto:tanujkumar14122005@gmail.com">
                   tanujkumar14122005@gmail.com
                 </a>

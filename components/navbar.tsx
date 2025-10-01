@@ -53,7 +53,7 @@ export function Navbar() {
   }, [active])
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40">
+    <header className="fixed inset-x-0 top-0 z-40" role="banner">
       <nav
         className="mx-auto mt-4 w-[min(100%-1rem,1000px)] rounded-full border border-white/15 bg-white/10 px-3 py-2 backdrop-blur supports-[backdrop-filter]:bg-white/10"
         aria-label="Primary"

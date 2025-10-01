@@ -18,8 +18,8 @@ export default function GamingNavbar({
   }, [])
 
   return (
-    <header className="fixed top-0 inset-x-0 z-40">
-      <nav className="mx-auto max-w-6xl px-4">
+    <header className="fixed top-0 inset-x-0 z-40" role="banner">
+      <nav className="mx-auto max-w-6xl px-4" role="navigation" aria-label="Primary">
         <div className="mt-4 glass neon-glow rounded-xl border border-white/10 backdrop-blur flex items-center justify-between px-4 py-3">
           <a href="#profile" className="font-mono tracking-wider">
             TKS<span className="text-red-600">_</span>DEV
